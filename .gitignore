@@ -1,0 +1,57 @@
+# maven ignore
+target/
+bint/
+*.jar
+*.war
+*.zip
+*.tar
+*.tar.gz
+out/
+
+# vs code ignore
+.vscode/
+
+# eclipse ignore
+.settings/
+.project
+.classpath
+
+# idea ignore
+.idea/
+*.ipr
+*.iml
+*.iws
+bin
+
+# temp ignore
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+*.java~
+*.properties~
+*.xml~
+.pmd
+*.pdb
+.checkstyle
+.eclipse-pmd
+logs/
+
+# system ignore
+.DS_Store
+Thumbs.db
+
+*/disconf/download
+disconf/
+.metadata/
+output/*
+*.lock
+
+*.releaseBackup
+release.properties
+*.versionsBackup
+
+node_modules/
+package.json
+
