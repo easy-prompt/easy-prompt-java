@@ -4,18 +4,18 @@ package io.github.easy.prompt.core.api.model
  * 代表LLM聊天完成后的回应
  */
 data class ChatCompletion(
-    private val chatModel: String,
-    private val prompt: String,
-    private val answer: String? = "",
-    private val reasoning: String? = "",
-    private val images: List<String>? = emptyList()
+    val chatModel: String,
+    val prompt: String,
+    val answer: String? = "",
+    val reasoning: String? = "",
+    val images: List<String>? = emptyList()
 )
 
 /**
  * 代表聊天记录
  */
 class HistoryChats(
-    private val historyChats: MutableList<ChatCompletion> = mutableListOf()
+    val historyChats: MutableList<ChatCompletion> = mutableListOf()
 ) {
 
     /**

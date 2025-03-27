@@ -4,16 +4,16 @@ data class PromptParam(
     /**
      * prompt使用的key
      */
-    private val key: String? = null,
+    val key: String,
 
     /**
      * prompt中需要使用的值
      */
-    private val promptContent: String? = null
+    val promptContent: String
 )
 
 class PromptParams(
-    private val promptParams: MutableList<PromptParam> = mutableListOf()
+    val promptParams: MutableList<PromptParam> = mutableListOf()
 ) {
 
     /**

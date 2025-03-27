@@ -1,5 +1,6 @@
 description: 经济社科类文章翻译用的Prompt。
 chatConfig:
+  model: Qwen
   temperature: 0.7
   topP: 0.7
   maxTokens: 2000
@@ -21,7 +22,7 @@ chatConfig:
       3. 根据第一步直译的结果和第二步指出的问题，重新进行意译，保证内容的原意的基础上，使其更易于理解，更符合中文的表达习惯，同时保持原有的格式不变。
   prompts:
     - # step1
-      model: Qwen
+      model: GLM_plus
       images:
         -
       prompt: |
@@ -31,11 +32,10 @@ chatConfig:
         ${content}
         """
     - # step2
-      model: Qwen
       images:
         -
       prompt: |
-        需要翻译的原文内容:
+        需要翻译的原文内容2:
         
         """
         ${content}
