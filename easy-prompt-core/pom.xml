@@ -17,7 +17,7 @@
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
 
         <jackson-databind.version>2.18.3</jackson-databind.version>
-        <openai-java.version>0.40.0</openai-java.version>
+        <openai-java.version>0.40.1</openai-java.version>
 
     </properties>
 

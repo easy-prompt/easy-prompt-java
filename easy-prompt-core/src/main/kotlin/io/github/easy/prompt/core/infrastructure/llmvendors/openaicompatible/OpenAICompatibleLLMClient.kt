@@ -2,16 +2,14 @@ package io.github.easy.prompt.core.infrastructure.llmvendors.openaicompatible
 
 import com.openai.client.OpenAIClient
 import com.openai.client.okhttp.OpenAIOkHttpClient
-import com.openai.helpers.ChatCompletionAccumulator
 import com.openai.models.chat.completions.ChatCompletionAssistantMessageParam
 import com.openai.models.chat.completions.ChatCompletionCreateParams
+import io.github.easy.prompt.core.api.model.llmclient.ILLMClient
 import io.github.easy.prompt.core.api.model.llmclient.PromptInvokeParam
+import io.github.easy.prompt.core.api.model.llmclient.StreamingHandler
 import io.github.easy.prompt.core.api.model.template.ChatCompletion
 import io.github.easy.prompt.core.api.model.template.HistoryChats
-import io.github.easy.prompt.core.api.model.llmclient.ILLMClient
-import io.github.easy.prompt.core.api.model.llmclient.StreamingHandler
 import java.util.concurrent.Executors
-import kotlin.jvm.optionals.asSequence
 
 class OpenAICompatibleLLMClient(
     private val apiUrl: String,
@@ -30,29 +28,65 @@ class OpenAICompatibleLLMClient(
 
         val params = prepareChatParams(systemPrompts, historyChats, fullPrompt, promptInvokeParam)
 
-        val chatCompletionAccumulator = ChatCompletionAccumulator.create()
+        val chatCompletionCache = ChatCompletionCache()
 
-        openaiClient
-            .async().chat().completions().createStreaming(params)
-            .subscribe({ chunk ->
-                chatCompletionAccumulator.accumulate(chunk)
-                    .choices().asSequence().flatMap { choice ->
-                        choice.delta().content().asSequence()
+        var reasoningMark = ReasoningMark.CHAT_INIT
+
+        openaiClient.chat().completions().createStreaming(params).use { streamResponse ->
+
+            streamResponse.stream()
+                .filter({ !it._choices().isNull() })
+                .flatMap { completion -> completion.choices().stream() }
+                .flatMap { choice ->
+
+                    // 如果是推理模型，输出推理过程之前添加 <think> 标签
+                    if (choice.delta()._additionalProperties()["reasoning_content"] != null
+                        && reasoningMark == ReasoningMark.CHAT_INIT
+                    ) {
+                        streamingHandler.onNext("<think>")
+                        reasoningMark = ReasoningMark.REASONING
                     }
-                    .forEach { streamingHandler.onNext(it) }
-            })
-            .onCompleteFuture()
-            .whenComplete { t, u -> streamingHandler.onComplete()}
-            .join()
+
+                    // 如果是推理模型，输出推理过程之后添加 </think> 标签
+                    if (choice.delta().content().isPresent
+                        && reasoningMark == ReasoningMark.REASONING
+                    ) {
+                        streamingHandler.onNext("</think>")
+                        reasoningMark = ReasoningMark.ANSWER
+                    }
+
+                    choice.delta()
+                        ._additionalProperties()["reasoning_content"]
+                        ?.asString()
+                        ?.ifPresent { chatCompletionCache.reasoningStringCache.append(it) }
+
+                    choice
+                        .delta()
+                        .content()
+                        .ifPresent { chatCompletionCache.answerStringCache.append(it) }
+
+                    listOf(
+                        // for reasoning model like deepseek r1
+                        choice.delta()
+                            ._additionalProperties()["reasoning_content"]
+                            ?.asString(),
+                        choice.delta().content()
+                    )
+                        .filter { it?.isPresent ?: false }
+                        .stream()
+
+
+                }
+                .forEach { streamingHandler.onNext(it?.orElse("") ?: "") }
+
+        }
 
         // 获取完整的聊天完成结果
-        val chatCompletion = chatCompletionAccumulator.chatCompletion()
-
         return ChatCompletion(
             chatModel = promptInvokeParam.model,
             prompt = fullPrompt,
-            answer = chatCompletion.choices().first().message().content().get(),
-            reasoning = chatCompletion.choices().first().message().content().get()
+            answer = chatCompletionCache.answerStringCache.toString(),
+            reasoning = chatCompletionCache.reasoningStringCache.toString(),
         )
 
     }
@@ -91,4 +125,15 @@ class OpenAICompatibleLLMClient(
     }
 
 
+}
+
+class ChatCompletionCache(
+    val reasoningStringCache: StringBuilder = StringBuilder(),
+    val answerStringCache: StringBuilder = StringBuilder()
+)
+
+enum class ReasoningMark {
+    CHAT_INIT,
+    REASONING,
+    ANSWER
 }
