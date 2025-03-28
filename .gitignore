@@ -54,3 +54,4 @@ release.properties
 
 node_modules/
 package.json
+*app.local.properties*

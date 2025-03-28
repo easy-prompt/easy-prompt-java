@@ -1,7 +1,8 @@
 package io.github.easy.prompt.core.infrastructure.provider
 
-import io.github.easy.prompt.core.api.model.ChatCompletion
-import io.github.easy.prompt.core.api.model.HistoryChats
+import io.github.easy.prompt.core.api.model.invoke.PromptInvokeParam
+import io.github.easy.prompt.core.api.model.template.ChatCompletion
+import io.github.easy.prompt.core.api.model.template.HistoryChats
 
 /**
  * LLM client interface
@@ -16,6 +17,16 @@ interface ILLMClient {
      * @param historyChats history chats
      * @return ChatCompletion
      */
-    fun invoke(systemPrompts: List<String>, fullPrompt: String, historyChats: HistoryChats): ChatCompletion
+    fun invoke(
+        systemPrompts: List<String> = emptyList(), fullPrompt: String,
+        historyChats: HistoryChats = HistoryChats(),
+        promptInvokeParam: PromptInvokeParam,
+        streamingHandler: StreamingHandler = EmptyStreamingHandler()
+    ): ChatCompletion
+
+    /**
+     * @return the provider name like openai, openrouter, azure, etc.
+     */
+    fun providerName(): String
 
 }

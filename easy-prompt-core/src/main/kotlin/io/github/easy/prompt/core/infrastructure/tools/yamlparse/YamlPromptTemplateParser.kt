@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.github.easy.prompt.core.api.model.PromptTemplate
+import io.github.easy.prompt.core.api.model.template.PromptTemplate
 import java.io.File
 import java.io.InputStream
 
@@ -14,7 +14,7 @@ import java.io.InputStream
  * YAML配置文件解析工具类
  * 使用Jackson库解析自定义格式的YAML配置文件，支持驼峰命名法
  */
-class YamlPromptParser {
+class YamlPromptTemplateParser {
 
     // 创建并配置YAML ObjectMapper实例，使用驼峰命名策略
     private val yamlObjectMapper = ObjectMapper(YAMLFactory()).apply {

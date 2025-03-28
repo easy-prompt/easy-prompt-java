@@ -17,6 +17,7 @@
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
 
         <jackson-databind.version>2.18.3</jackson-databind.version>
+        <openai-java.version>0.40.0</openai-java.version>
 
     </properties>
 
@@ -103,6 +104,13 @@
             <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.openai</groupId>
+            <artifactId>openai-java</artifactId>
+            <version>${openai-java.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

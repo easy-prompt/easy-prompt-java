@@ -1,4 +1,4 @@
-package io.github.easy.prompt.core.api.model
+package io.github.easy.prompt.core.api.model.template
 
 data class PromptParam(
     /**

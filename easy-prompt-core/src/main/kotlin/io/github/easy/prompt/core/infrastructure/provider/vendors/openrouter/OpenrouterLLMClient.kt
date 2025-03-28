@@ -1,12 +1,17 @@
-package io.github.easy.prompt.core.api.fake
+package io.github.easy.prompt.core.infrastructure.provider.vendors.openrouter
 
 import io.github.easy.prompt.core.api.model.invoke.PromptInvokeParam
 import io.github.easy.prompt.core.api.model.template.ChatCompletion
 import io.github.easy.prompt.core.api.model.template.HistoryChats
 import io.github.easy.prompt.core.infrastructure.provider.ILLMClient
 import io.github.easy.prompt.core.infrastructure.provider.StreamingHandler
+import io.github.easy.prompt.core.infrastructure.provider.vendors.openaicompatible.OpenAICompatibleLLMClient
 
-class FakeLLMChatClient : ILLMClient {
+class OpenrouterLLMClient(
+    private val apiUrl: String,
+    private val apiKey: String,
+    private val openrouterClient: OpenAICompatibleLLMClient = OpenAICompatibleLLMClient(apiUrl, apiKey)
+) : ILLMClient {
 
     override fun invoke(
         systemPrompts: List<String>,
@@ -16,12 +21,10 @@ class FakeLLMChatClient : ILLMClient {
         streamingHandler: StreamingHandler
     ): ChatCompletion {
 
-        return ChatCompletion(
-            chatModel = "model name", prompt = fullPrompt,
-            answer = "fake answer", reasoning = "fake reasoning", images = emptyList()
-        )
+        return openrouterClient.invoke(systemPrompts, fullPrompt, historyChats, promptInvokeParam, streamingHandler)
     }
 
-    override fun providerName() = "fake"
-
+    override fun providerName(): String {
+        return "openrouter"
+    }
 }

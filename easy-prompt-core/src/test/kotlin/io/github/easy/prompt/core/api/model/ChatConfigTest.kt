@@ -1,5 +1,7 @@
 package io.github.easy.prompt.core.api.model
 
+import io.github.easy.prompt.core.api.model.template.ChatConfig
+import io.github.easy.prompt.core.api.model.template.PromptParams
 import org.junit.jupiter.api.Test
 
 class ChatConfigTest {

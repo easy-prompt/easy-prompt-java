@@ -1,4 +1,4 @@
-package io.github.easy.prompt.core.api.model
+package io.github.easy.prompt.core.api.model.template
 
 /**
  * prompt template class
@@ -16,7 +16,8 @@ class PromptTemplate(
  */
 class ChatConfig(
     val model: String = "",
-    val temperature: Double = 0.0,
+    val provider : String = "",
+    val temperature: Double = 0.7,
     val topP: Double? = 0.0,
     val maxTokens: Int? = 0,
     val systemMessages: List<String> = emptyList(),
@@ -51,6 +52,7 @@ class ChatConfig(
  */
 class PromptStep(
     val model: String? = null,
+    val provider : String? = null,
     val prompt: String? = null,
     val images: List<String>? = emptyList()
 ) {
