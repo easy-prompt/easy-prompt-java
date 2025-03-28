@@ -28,7 +28,7 @@ class OpenAICompatibleLLMClient(
         promptInvokeParam: PromptInvokeParam, streamingHandler: StreamingHandler
     ): ChatCompletion {
 
-        val params = prepareChatParams(historyChats, fullPrompt, promptInvokeParam)
+        val params = prepareChatParams(systemPrompts, historyChats, fullPrompt, promptInvokeParam)
 
         val chatCompletionAccumulator = ChatCompletionAccumulator.create()
 
@@ -58,21 +58,21 @@ class OpenAICompatibleLLMClient(
     }
 
     private fun prepareChatParams(
+        systemPrompts: List<String>,
         historyChats: HistoryChats, fullPrompt: String,
         promptInvokeParam: PromptInvokeParam
     ): ChatCompletionCreateParams {
 
         val paramBuilder = ChatCompletionCreateParams.builder()
 
-        historyChats.historyChats.forEach { chat ->
+        systemPrompts.forEach { paramBuilder.addSystemMessage(it) }
 
+        historyChats.historyChats.forEach { chat ->
             paramBuilder
                 .addUserMessage(chat.prompt)
                 .addMessage(
-                    ChatCompletionAssistantMessageParam
-                        .builder().content(fullPrompt).build()
+                    ChatCompletionAssistantMessageParam.builder().content(chat.answer ?: "").build()
                 )
-
         }
 
         paramBuilder.addUserMessage(fullPrompt)
