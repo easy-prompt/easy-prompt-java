@@ -1,10 +1,10 @@
 package io.github.easy.prompt.core.api.fake
 
-import io.github.easy.prompt.core.api.model.invoke.PromptInvokeParam
+import io.github.easy.prompt.core.api.model.llmclient.PromptInvokeParam
 import io.github.easy.prompt.core.api.model.template.ChatCompletion
 import io.github.easy.prompt.core.api.model.template.HistoryChats
-import io.github.easy.prompt.core.infrastructure.provider.ILLMClient
-import io.github.easy.prompt.core.infrastructure.provider.StreamingHandler
+import io.github.easy.prompt.core.api.model.llmclient.ILLMClient
+import io.github.easy.prompt.core.api.model.llmclient.StreamingHandler
 
 class FakeLLMChatClient : ILLMClient {
 

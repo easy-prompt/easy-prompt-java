@@ -1,15 +1,15 @@
-package io.github.easy.prompt.core.infrastructure.provider.vendors.openaicompatible
+package io.github.easy.prompt.core.infrastructure.llmvendors.openaicompatible
 
 import com.openai.client.OpenAIClient
 import com.openai.client.okhttp.OpenAIOkHttpClient
 import com.openai.helpers.ChatCompletionAccumulator
 import com.openai.models.chat.completions.ChatCompletionAssistantMessageParam
 import com.openai.models.chat.completions.ChatCompletionCreateParams
-import io.github.easy.prompt.core.api.model.invoke.PromptInvokeParam
+import io.github.easy.prompt.core.api.model.llmclient.PromptInvokeParam
 import io.github.easy.prompt.core.api.model.template.ChatCompletion
 import io.github.easy.prompt.core.api.model.template.HistoryChats
-import io.github.easy.prompt.core.infrastructure.provider.ILLMClient
-import io.github.easy.prompt.core.infrastructure.provider.StreamingHandler
+import io.github.easy.prompt.core.api.model.llmclient.ILLMClient
+import io.github.easy.prompt.core.api.model.llmclient.StreamingHandler
 import java.util.concurrent.Executors
 import kotlin.jvm.optionals.asSequence
 
@@ -42,7 +42,7 @@ class OpenAICompatibleLLMClient(
                     .forEach { streamingHandler.onNext(it) }
             })
             .onCompleteFuture()
-            .whenComplete { t, u -> }
+            .whenComplete { t, u -> streamingHandler.onComplete()}
             .join()
 
         // 获取完整的聊天完成结果

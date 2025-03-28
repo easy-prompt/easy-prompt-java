@@ -1,4 +1,4 @@
-package io.github.easy.prompt.core.infrastructure.tools.yamlparse
+package io.github.easy.prompt.core.infrastructure.utils.yamlparse
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper

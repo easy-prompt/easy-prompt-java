@@ -1,7 +1,8 @@
 package io.github.easy.prompt.core.infrastructure.provider.vendors.openaicompatible
 
-import io.github.easy.prompt.core.api.model.invoke.PromptInvokeParam
-import io.github.easy.prompt.core.infrastructure.tools.propread.PropertiesUtils
+import io.github.easy.prompt.core.api.model.llmclient.PromptInvokeParam
+import io.github.easy.prompt.core.infrastructure.llmvendors.openaicompatible.OpenAICompatibleLLMClient
+import io.github.easy.prompt.core.infrastructure.utils.propread.PropertiesUtils
 import org.junit.jupiter.api.Test
 
 class OpenAICompatibleLLMClientTest {
@@ -12,8 +13,8 @@ class OpenAICompatibleLLMClientTest {
         val prop = PropertiesUtils.fromClasspath("app.local.properties")
 
         val llmClient = OpenAICompatibleLLMClient(
-            apiUrl = prop.getProperty("openrouter.api.url", ""),
             apiKey = prop.getProperty("openrouter.api.key", ""),
+            apiUrl = prop.getProperty("openrouter.api.url", ""),
         )
 
         val completion = llmClient.invoke(

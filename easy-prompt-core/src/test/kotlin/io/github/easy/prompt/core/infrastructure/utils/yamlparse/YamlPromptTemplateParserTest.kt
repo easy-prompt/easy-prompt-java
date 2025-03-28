@@ -1,6 +1,5 @@
-package io.github.easy.prompt.core.infrastructure.tools.yamlparse
+package io.github.easy.prompt.core.infrastructure.utils.yamlparse
 
-import io.github.easy.prompt.core.infrastructure.tools.yamlparse.YamlPromptTemplateParser
 import org.junit.jupiter.api.Test
 
 class YamlPromptTemplateParserTest {

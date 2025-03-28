@@ -1,15 +1,15 @@
-package io.github.easy.prompt.core.infrastructure.provider.vendors.openai
+package io.github.easy.prompt.core.infrastructure.llmvendors.openai
 
-import io.github.easy.prompt.core.api.model.invoke.PromptInvokeParam
+import io.github.easy.prompt.core.api.model.llmclient.PromptInvokeParam
 import io.github.easy.prompt.core.api.model.template.ChatCompletion
 import io.github.easy.prompt.core.api.model.template.HistoryChats
-import io.github.easy.prompt.core.infrastructure.provider.ILLMClient
-import io.github.easy.prompt.core.infrastructure.provider.StreamingHandler
-import io.github.easy.prompt.core.infrastructure.provider.vendors.openaicompatible.OpenAICompatibleLLMClient
+import io.github.easy.prompt.core.api.model.llmclient.ILLMClient
+import io.github.easy.prompt.core.api.model.llmclient.StreamingHandler
+import io.github.easy.prompt.core.infrastructure.llmvendors.openaicompatible.OpenAICompatibleLLMClient
 
 class OpenAILLMClient(
-    private val apiUrl: String,
     private val apiKey: String,
+    private val apiUrl: String,
     private val openAICompatibleLLMClient: OpenAICompatibleLLMClient = OpenAICompatibleLLMClient(apiUrl, apiKey)
 ) : ILLMClient {
 

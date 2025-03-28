@@ -1,4 +1,4 @@
-package io.github.easy.prompt.core.infrastructure.tools.propread
+package io.github.easy.prompt.core.infrastructure.utils.propread
 
 import java.io.FileInputStream
 import java.io.FileNotFoundException

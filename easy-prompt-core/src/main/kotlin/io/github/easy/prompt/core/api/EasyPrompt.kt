@@ -1,10 +1,10 @@
 package io.github.easy.prompt.core.api
 
 import io.github.easy.prompt.core.api.model.template.HistoryChats
-import io.github.easy.prompt.core.api.model.invoke.PromptInvokeParam
+import io.github.easy.prompt.core.api.model.llmclient.PromptInvokeParam
 import io.github.easy.prompt.core.api.model.template.PromptParams
-import io.github.easy.prompt.core.infrastructure.provider.LLMProviders
-import io.github.easy.prompt.core.infrastructure.tools.yamlparse.YamlPromptTemplateParser
+import io.github.easy.prompt.core.api.model.llmclient.LLMProviders
+import io.github.easy.prompt.core.infrastructure.utils.yamlparse.YamlPromptTemplateParser
 
 class EasyPrompt(
     private val llmProviders: LLMProviders = LLMProviders(),

@@ -1,4 +1,4 @@
-package io.github.easy.prompt.core.infrastructure.provider
+package io.github.easy.prompt.core.api.model.llmclient
 
 /**
  * LLMProviders

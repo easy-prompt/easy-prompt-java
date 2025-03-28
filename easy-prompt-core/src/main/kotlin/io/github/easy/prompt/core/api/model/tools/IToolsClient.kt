@@ -1,13 +1,12 @@
-package io.github.easy.prompt.core.infrastructure.provider
+package io.github.easy.prompt.core.api.model.tools
 
-import io.github.easy.prompt.core.api.model.invoke.PromptInvokeParam
+import io.github.easy.prompt.core.api.model.llmclient.EmptyStreamingHandler
+import io.github.easy.prompt.core.api.model.llmclient.PromptInvokeParam
+import io.github.easy.prompt.core.api.model.llmclient.StreamingHandler
 import io.github.easy.prompt.core.api.model.template.ChatCompletion
 import io.github.easy.prompt.core.api.model.template.HistoryChats
 
-/**
- * LLM client interface
- */
-interface ILLMClient {
+interface IToolsClient {
 
     /**
      * Sync invoke LLM chat api
@@ -27,6 +26,6 @@ interface ILLMClient {
     /**
      * @return the provider name like openai, openrouter, azure, etc.
      */
-    fun providerName(): String
+    fun toolsName(): String
 
 }

@@ -54,6 +54,7 @@ class PromptStep(
     val model: String? = null,
     val provider : String? = null,
     val prompt: String? = null,
+    val tools: List<String>? = emptyList(),
     val images: List<String>? = emptyList()
 ) {
 

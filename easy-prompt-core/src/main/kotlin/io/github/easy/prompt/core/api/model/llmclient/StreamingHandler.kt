@@ -1,10 +1,10 @@
-package io.github.easy.prompt.core.infrastructure.provider
+package io.github.easy.prompt.core.api.model.llmclient
 
 interface StreamingHandler {
 
     fun onNext(data: Any);
 
-    fun onComplete(data: Any);
+    fun onComplete();
 
 }
 
@@ -15,9 +15,9 @@ class EmptyStreamingHandler : StreamingHandler {
         println("onNext: $data")
     }
 
-    override fun onComplete(data: Any) {
+    override fun onComplete() {
         // do nothing
-        println("onNext: $data")
+        println("onComplete.")
     }
 
 }

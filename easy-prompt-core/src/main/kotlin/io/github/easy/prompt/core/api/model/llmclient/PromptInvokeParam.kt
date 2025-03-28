@@ -1,4 +1,4 @@
-package io.github.easy.prompt.core.api.model.invoke
+package io.github.easy.prompt.core.api.model.llmclient
 
 import io.github.easy.prompt.core.api.model.template.ChatConfig
 import io.github.easy.prompt.core.api.model.template.PromptStep
@@ -7,7 +7,7 @@ data class PromptInvokeParam(
     val model: String = "",
     val provider: String = "",
     val temperature: Double = 0.7,
-    val topP: Double? = 0.0,
+    val topP: Double? = null,
     val maxTokens: Int? = 1000
 ) {
 

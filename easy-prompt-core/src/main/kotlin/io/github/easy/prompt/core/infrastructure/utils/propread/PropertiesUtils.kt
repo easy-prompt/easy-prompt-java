@@ -1,4 +1,4 @@
-package io.github.easy.prompt.core.infrastructure.tools.propread
+package io.github.easy.prompt.core.infrastructure.utils.propread
 
 /**
  * Properties工具类，提供方便的静态方法读取属性

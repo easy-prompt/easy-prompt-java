@@ -28,6 +28,10 @@ chatConfig:
         """
         ${content}
         """
+      tools:
+        - tool_name1
+        - tool_name2
+        - tool_name3
     - # step2
       prompt: |
         保留最后一步的翻译结果。
