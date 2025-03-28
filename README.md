@@ -1,19 +1,19 @@
 # Easy Prompt
 
-Easy Prompt是一个简化大语言模型(LLM)提示词调用的Kotlin/Java框架。它提供了一种结构化的方式来定义、管理和执行提示词模板，支持多种LLM提供商，并具有灵活的配置选项。
+Easy Prompt is a Kotlin/Java framework that simplifies Large Language Model (LLM) prompt invocation. It provides a structured way to define, manage, and execute prompt templates, supports multiple LLM providers, and offers flexible configuration options.
 
-## 特性
+## Features
 
-- **YAML模板定义**：使用YAML文件定义结构化的提示词模板
-- **多LLM提供商支持**：内置支持OpenAI兼容接口、OpenRouter等多种LLM服务提供商
-- **参数化提示词**：支持在提示词中使用变量，实现动态内容替换
-- **会话历史管理**：自动管理对话历史，支持多轮对话
-- **流式响应**：支持流式响应处理，实时获取LLM生成内容
-- **灵活配置**：支持为不同提示步骤配置不同的模型和参数
+- **YAML Template Definition**: Define structured prompt templates using YAML files
+- **Multiple LLM Provider Support**: Built-in support for OpenAI-compatible interfaces, OpenRouter, and other LLM service providers
+- **Parameterized Prompts**: Support for variables in prompts, enabling dynamic content replacement
+- **Conversation History Management**: Automatic management of conversation history, supporting multi-turn dialogues
+- **Streaming Responses**: Support for streaming response processing, receiving LLM-generated content in real-time
+- **Flexible Configuration**: Support for configuring different models and parameters for different prompt steps
 
-## 快速开始
+## Quick Start
 
-### 添加依赖
+### Add Dependency
 
 Maven:
 ```xml
@@ -29,12 +29,12 @@ Gradle:
 implementation("io.github.easy.prompt:easy-prompt-core:{latest-version}")
 ```
 
-### 创建YAML提示词模板
+### Create YAML Prompt Template
 
-在`src/main/resources/prompts`目录下创建YAML文件，例如`translate_prompt.yaml`:
+Create a YAML file in the `src/main/resources/prompts` directory, for example `translate_prompt.yaml`:
 
 ```yaml
-description: 经济社科类文章翻译用的Prompt。
+description: Prompt for translating economics and social science articles.
 chatConfig:
   provider: openrouter
   model: qwen/qwen-2.5-72b-instruct
@@ -42,32 +42,32 @@ chatConfig:
   maxTokens: 2000
   systemMessages:
     - |
-      你是一位精通简体中文的专业翻译，曾参与《纽约时报》和《经济学人》中文版的翻译工作，因此对于新闻和时事文章的翻译有深入的理解。我希望你能帮我将以下英文新闻段落翻译成中文，风格与上述杂志的中文版相似。
+      You are a professional translator fluent in Simplified Chinese who has worked on Chinese translations for The New York Times and The Economist. You have a deep understanding of translating news and current affairs articles. I would like you to help me translate the following English news paragraphs into Chinese, with a style similar to the Chinese editions of the aforementioned magazines.
       
-      翻译规则:
-      - 这是一篇经济、时政分析的文章，请保证翻译的内容准确无误。
-      - 翻译时要准确传达新闻事实和背景。
-      - 保留特定的英文术语或名字，并在其前后加上空格，例如："中 UN 文"。
+      Translation rules:
+      - This is an economic and political analysis article, please ensure the translation is accurate.
+      - Accurately convey the news facts and background when translating.
+      - Retain specific English terms or names with spaces before and after, for example: "中 UN 文".
   prompts:
     - # step1
       prompt: |
-        需要翻译的原文内容:
+        Original content to translate:
         
         """
         ${content}
         """
     - # step2
       prompt: |
-        保留最后一步的翻译结果。
+        Keep the translation result from the last step.
 ```
 
-### 初始化并调用LLM
+### Initialize and Call LLM
 
 ```kotlin
-// 从配置文件加载属性
+// Load properties from configuration file
 val prop = PropertiesUtils.fromClasspath("app.local.properties")
 
-// 创建EasyPrompt实例并配置LLM提供商
+// Create EasyPrompt instance and configure LLM providers
 val easyPrompt = EasyPrompt(
     llmProviders = LLMProviders(
         llmClients = mutableListOf(
@@ -79,7 +79,7 @@ val easyPrompt = EasyPrompt(
     )
 )
 
-// 调用提示词模板并传递参数
+// Call the prompt template and pass parameters
 val historyChats = easyPrompt.invokePrompt(
     "prompts/translate_prompt.yaml",
     PromptParams().addParams(
@@ -89,16 +89,16 @@ val historyChats = easyPrompt.invokePrompt(
     HistoryChats()
 )
 
-// 获取最后一次回复
+// Get the last response
 val lastResponse = historyChats.leastChatCompletion()
 println(lastResponse?.answer)
 ```
 
-## 核心概念
+## Core Concepts
 
 ### EasyPrompt
 
-`EasyPrompt`是框架的主要入口点，负责加载YAML模板并调用LLM服务。
+`EasyPrompt` is the main entry point of the framework, responsible for loading YAML templates and calling LLM services.
 
 ```kotlin
 class EasyPrompt(
@@ -107,12 +107,12 @@ class EasyPrompt(
 )
 ```
 
-主要方法：
-- `invokePrompt(yamlTemplatePath, promptParams, historyChats)`: 调用指定的提示词模板，传入参数和历史记录，返回更新后的历史记录
+Main methods:
+- `invokePrompt(yamlTemplatePath, promptParams, historyChats)`: Call the specified prompt template, pass parameters and history, and return updated history
 
-### 提示词模板 (PromptTemplate)
+### Prompt Template (PromptTemplate)
 
-提示词模板定义了与LLM交互的结构，包括系统消息、提示步骤和配置参数。
+Prompt templates define the structure for interacting with LLMs, including system messages, prompt steps, and configuration parameters.
 
 ```kotlin
 class PromptTemplate(
@@ -121,9 +121,9 @@ class PromptTemplate(
 )
 ```
 
-### 聊天配置 (ChatConfig)
+### Chat Configuration (ChatConfig)
 
-聊天配置定义了LLM调用的参数，如模型、提供商、温度等。
+Chat configuration defines the parameters for LLM calls, such as model, provider, temperature, etc.
 
 ```kotlin
 class ChatConfig(
@@ -137,12 +137,12 @@ class ChatConfig(
 )
 ```
 
-主要方法：
-- `fillSystemPrompts(params)`: 使用提供的参数填充系统消息中的变量
+Main methods:
+- `fillSystemPrompts(params)`: Fill variables in system messages with provided parameters
 
-### 提示步骤 (PromptStep)
+### Prompt Step (PromptStep)
 
-提示步骤定义了单个提示的内容和配置。
+Prompt steps define the content and configuration for a single prompt.
 
 ```kotlin
 class PromptStep(
@@ -153,12 +153,12 @@ class PromptStep(
 )
 ```
 
-主要方法：
-- `fillPrompts(params)`: 使用提供的参数填充提示词中的变量
+Main methods:
+- `fillPrompts(params)`: Fill variables in prompts with provided parameters
 
-### 提示参数 (PromptParams)
+### Prompt Parameters (PromptParams)
 
-提示参数用于在提示词模板中替换变量。
+Prompt parameters are used to replace variables in prompt templates.
 
 ```kotlin
 class PromptParams(
@@ -168,9 +168,9 @@ class PromptParams(
 }
 ```
 
-### 聊天历史 (HistoryChats)
+### Chat History (HistoryChats)
 
-聊天历史记录了与LLM的交互历史。
+Chat history records the interaction history with the LLM.
 
 ```kotlin
 class HistoryChats(
@@ -181,17 +181,17 @@ class HistoryChats(
 }
 ```
 
-## 支持的LLM提供商
+## Supported LLM Providers
 
-Easy Prompt通过`ILLMClient`接口支持多种LLM提供商：
+Easy Prompt supports multiple LLM providers through the `ILLMClient` interface:
 
-- **OpenAI兼容接口** (`OpenAICompatibleLLMClient`): 支持所有兼容OpenAI API的服务
-- **OpenRouter** (`OpenrouterLLMClient`): 支持通过OpenRouter访问多种模型
-- 更多提供商正在开发中...
+- **OpenAI-compatible Interface** (`OpenAICompatibleLLMClient`): Supports all services compatible with the OpenAI API
+- **OpenRouter** (`OpenrouterLLMClient`): Supports access to multiple models through OpenRouter
+- More providers are in development...
 
-## 自定义LLM客户端
+## Custom LLM Client
 
-您可以通过实现`ILLMClient`接口来创建自定义的LLM客户端：
+You can create custom LLM clients by implementing the `ILLMClient` interface:
 
 ```kotlin
 interface ILLMClient {
@@ -207,7 +207,7 @@ interface ILLMClient {
 }
 ```
 
-然后将您的自定义客户端添加到`LLMProviders`中：
+Then add your custom client to `LLMProviders`:
 
 ```kotlin
 val llmProviders = LLMProviders(
@@ -218,24 +218,24 @@ val llmProviders = LLMProviders(
 )
 ```
 
-## 高级用法
+## Advanced Usage
 
-### 流式响应处理
+### Streaming Response Processing
 
 ```kotlin
 val streamingHandler = object : StreamingHandler {
     override fun onNext(data: Any) {
-        // 处理流式响应的每个部分
+        // Process each part of the streaming response
         print(data)
     }
 
     override fun onComplete(data: Any) {
-        // 处理完成事件
+        // Handle completion event
         println("\nResponse completed")
     }
 }
 
-// 在调用时传入streamingHandler
+// Pass streamingHandler when invoking
 val chatCompletion = llmClient.invoke(
     systemPrompts = listOf("You are a helpful assistant"),
     fullPrompt = "Tell me a joke",
@@ -244,61 +244,61 @@ val chatCompletion = llmClient.invoke(
 )
 ```
 
-### 多步骤提示词
+### Multi-step Prompts
 
-YAML模板支持定义多个提示步骤，每个步骤可以使用不同的模型和提供商：
+YAML templates support defining multiple prompt steps, each with different models and providers:
 
 ```yaml
 chatConfig:
   provider: openai
   model: gpt-4
   prompts:
-    - # 第一步使用默认配置
+    - # First step uses default configuration
       prompt: "Generate a story idea"
-    - # 第二步使用不同的模型
+    - # Second step uses a different model
       model: gpt-3.5-turbo
       prompt: "Expand on the previous idea"
 ```
 
-### 使用历史记录进行多轮对话
+### Using History for Multi-turn Conversations
 
 ```kotlin
-// 第一轮对话
+// First round of conversation
 var historyChats = easyPrompt.invokePrompt(
     yamlTemplatePath = "prompts/chat_prompt.yaml",
-    promptParams = PromptParams().addParams("query", "你好，请介绍一下自己"),
+    promptParams = PromptParams().addParams("query", "Hello, please introduce yourself"),
     historyChats = HistoryChats()
 )
 
-// 第二轮对话，使用上一轮的历史记录
+// Second round of conversation, using the history from the previous round
 historyChats = easyPrompt.invokePrompt(
     yamlTemplatePath = "prompts/chat_prompt.yaml",
-    promptParams = PromptParams().addParams("query", "我想了解更多关于你的能力"),
-    historyChats = historyChats  // 传入上一轮的历史记录
+    promptParams = PromptParams().addParams("query", "I'd like to know more about your capabilities"),
+    historyChats = historyChats  // Pass the history from the previous round
 )
 ```
 
-## 配置文件
+## Configuration Files
 
-Easy Prompt支持通过属性文件进行配置。您可以在`src/main/resources`目录下创建配置文件，例如`app.properties`或`app.local.properties`（用于本地开发环境）：
+Easy Prompt supports configuration through property files. You can create configuration files in the `src/main/resources` directory, such as `app.properties` or `app.local.properties` (for local development environments):
 
 ```properties
-# OpenRouter配置
+# OpenRouter configuration
 openrouter.api.url=https://openrouter.ai/api/v1
 openrouter.api.key=your-api-key-here
 
-# OpenAI兼容接口配置
+# OpenAI-compatible interface configuration
 openai.api.url=https://api.openai.com/v1
 openai.api.key=your-api-key-here
 ```
 
-然后使用`PropertiesUtils`加载配置：
+Then use `PropertiesUtils` to load the configuration:
 
 ```kotlin
-// 从类路径加载配置文件
+// Load configuration file from classpath
 val prop = PropertiesUtils.fromClasspath("app.local.properties")
 
-// 使用配置初始化LLM客户端
+// Initialize LLM client with configuration
 val llmProviders = LLMProviders(
     llmClients = mutableListOf(
         OpenrouterLLMClient(
@@ -309,13 +309,13 @@ val llmProviders = LLMProviders(
 )
 ```
 
-## 贡献
+## Contributing
 
-欢迎贡献代码、报告问题或提出改进建议。请遵循项目的贡献指南。
+Contributions are welcome, including code contributions, issue reports, or improvement suggestions. Please follow the project's contribution guidelines.
 
-## 许可证
+## License
 
-本项目采用 [Apache License 2.0](LICENSE) 许可证。
+This project is licensed under the [Apache License 2.0](LICENSE).
 
 ```
 Copyright [yyyy] [name of copyright owner]
@@ -331,4 +331,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-```
