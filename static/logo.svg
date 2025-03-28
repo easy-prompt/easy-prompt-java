@@ -1,0 +1,12 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="100" cy="100" r="90" fill="#2D3748" />
+  <!-- 对话框形状 - 居中调整 -->
+  <path d="M55 65 L55 135 L85 135 L100 155 L115 135 L145 135 L145 65 Z" fill="#4299E1" />
+  <!-- 代码提示符号 - 调整为居中 -->
+  <path d="M75 90 L90 105 L75 120" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <path d="M125 90 L110 105 L125 120" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <!-- 科技环形元素 -->
+  <circle cx="100" cy="100" r="85" stroke="#4299E1" stroke-width="2" stroke-dasharray="5,5" fill="none" />
+  <circle cx="100" cy="100" r="95" stroke="#4299E1" stroke-width="1" stroke-dasharray="2,4" fill="none" />
+</svg>
