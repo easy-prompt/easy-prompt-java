@@ -36,7 +36,7 @@ class EasyPromptTest {
             HistoryChats()
         )
 
-        assertNotNull(historyChats)
+        assertNotNull(historyChats.leastChatCompletion())
 
     }
 
