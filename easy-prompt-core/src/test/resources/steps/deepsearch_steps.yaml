@@ -1,0 +1,22 @@
+description: document interpretation
+steps:
+  - # step1
+    id: rewrite_question
+    description: rewrite user question
+    prompt_template: "document_interpretation/rewrite_question"
+    following_steps:
+      - plan_template
+  - # step2
+    id: analyze_plan
+    description: this is plan_template
+    prompt_template: "document_interpretation/plan_template"
+    following_steps:
+      - analyze_document
+  - # step3
+    id: analyze_document
+    description: analyze the document content
+    following_steps:
+      - summary_steps
+  - # step4
+    id: summary_steps
+    description: this is summary_steps
