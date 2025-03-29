@@ -18,7 +18,8 @@ class OpenAICompatibleLLMClient(
         .apiKey(apiKey)
         .baseUrl(apiUrl)
         .streamHandlerExecutor(Executors.newFixedThreadPool(10))
-        .build()
+        .build(),
+    private val reasoningFieldName: String = "reasoning_content"
 ) : ILLMClient {
 
     override fun invoke(
@@ -35,49 +36,50 @@ class OpenAICompatibleLLMClient(
         openaiClient.chat().completions().createStreaming(params).use { streamResponse ->
 
             streamResponse.stream()
-                .filter({ !it._choices().isNull() })
                 .flatMap { completion -> completion.choices().stream() }
-                .flatMap { choice ->
+                .filter { choice ->
+                    choice.delta()
+                        ._additionalProperties()[reasoningFieldName]?.asString()?.isPresent == true
+                            || choice.delta().content().isPresent
+                }
+                .forEach { choice ->
 
                     // 如果是推理模型，输出推理过程之前添加 <think> 标签
-                    if (choice.delta()._additionalProperties()["reasoning_content"] != null
+                    if (choice.delta()._additionalProperties()[reasoningFieldName]?.asString()?.isPresent == true
+                        && choice.delta().content().map { it.isEmpty() }.orElse(false)
+                        && chatCompletionCache.reasoningStringCache.isEmpty()
                         && reasoningMark == ReasoningMark.CHAT_INIT
                     ) {
                         streamingHandler.onNext("<think>")
                         reasoningMark = ReasoningMark.REASONING
                     }
 
+                    choice.delta()
+                        ._additionalProperties()[reasoningFieldName]
+                        ?.asString()
+                        ?.ifPresent {
+                            chatCompletionCache.reasoningStringCache.append(it)
+                            streamingHandler.onNext(it)
+                        }
+
                     // 如果是推理模型，输出推理过程之后添加 </think> 标签
-                    if (choice.delta().content().isPresent
+                    if (choice.delta().content().map { it.isNotBlank() }.orElse(false)
+                        && chatCompletionCache.answerStringCache.isEmpty()
                         && reasoningMark == ReasoningMark.REASONING
                     ) {
                         streamingHandler.onNext("</think>")
                         reasoningMark = ReasoningMark.ANSWER
                     }
 
-                    choice.delta()
-                        ._additionalProperties()["reasoning_content"]
-                        ?.asString()
-                        ?.ifPresent { chatCompletionCache.reasoningStringCache.append(it) }
-
                     choice
                         .delta()
                         .content()
-                        .ifPresent { chatCompletionCache.answerStringCache.append(it) }
-
-                    listOf(
-                        // for reasoning model like deepseek r1
-                        choice.delta()
-                            ._additionalProperties()["reasoning_content"]
-                            ?.asString(),
-                        choice.delta().content()
-                    )
-                        .filter { it?.isPresent ?: false }
-                        .stream()
-
+                        .ifPresent {
+                            chatCompletionCache.answerStringCache.append(it)
+                            streamingHandler.onNext(it)
+                        }
 
                 }
-                .forEach { streamingHandler.onNext(it?.orElse("") ?: "") }
 
         }
 

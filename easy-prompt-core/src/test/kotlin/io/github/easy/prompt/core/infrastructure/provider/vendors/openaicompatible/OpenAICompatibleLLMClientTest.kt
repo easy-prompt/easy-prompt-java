@@ -15,12 +15,13 @@ class OpenAICompatibleLLMClientTest {
         val llmClient = OpenAICompatibleLLMClient(
             apiKey = prop.getProperty("openrouter.api.key", ""),
             apiUrl = prop.getProperty("openrouter.api.url", ""),
+            reasoningFieldName = "reasoning"
         )
 
         val completion = llmClient.invoke(
-            fullPrompt = "My only vehicle I have right now is a 2021 RAM 2500 diesel. I wouldgladly trade it in for a Cybertruck just for the turning radius alone.",
+            fullPrompt = "How many Rs are there in the word 'strawberry'?",
             promptInvokeParam = PromptInvokeParam(
-                model = "deepseek/deepseek-chat-v3-0324"
+                model = "deepseek/deepseek-r1-distill-llama-8b"
             )
         )
 
