@@ -18,7 +18,7 @@ Easy Prompt是一个简化大语言模型(LLM)提示词调用的Kotlin/Java框�
 Maven:
 ```xml
 <dependency>
-    <groupId>io.github.easy.prompt</groupId>
+    <groupId>io.github.easy-prompt</groupId>
     <artifactId>easy-prompt-core</artifactId>
     <version>{latest-version}</version>
 </dependency>

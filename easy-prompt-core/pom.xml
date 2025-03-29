@@ -52,6 +52,20 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- 使用 JAR 插件排除文件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**app.local.properties</exclude>
+                        <exclude>application.yml</exclude>
+                        <exclude>**/*.json</exclude>
+                        <exclude>config/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
